@@ -33,6 +33,19 @@ export default {
         .then(() => {
           this.getAllData();
         });
+    },
+    updateTask(status,index) {
+      console.log(status, index);
+      const params = {
+        params: {
+          'newTodo': this.newTodo,
+          'completed': status
+        }
+      };
+      axios.get(`${API_URL}api-update.php?index=${index}`, params)
+        .then(() => {
+          this.getAllData()
+        });
     }
   },
   mounted() {
@@ -53,6 +66,7 @@ export default {
       <li v-for="(todoElem, ind) in todoList" :key="ind">
         {{ todoElem.text }}
         <button @click.prevent="removeTask(ind)">Rimuovi</button>
+        <button @click.prevent="updateTask(todoElem.completed,ind)">update</button>
       </li>
     </ul>
   </div>
@@ -61,5 +75,7 @@ export default {
 </template>
 
 <style scoped>
+
+
 
 </style>
