@@ -29,7 +29,7 @@ export default {
         });
     },
     removeTask(index) {
-      axios.delete(`${API_URL}api-delete.php?index=${index}`)
+      axios.get(`${API_URL}api-delete.php?index=${index}`)
         .then(() => {
           this.getAllData();
         });
