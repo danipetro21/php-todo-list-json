@@ -1,9 +1,6 @@
 <script>
-
 import axios from 'axios';
-
 const API_URL = "http://localhost:8888/";
-
 export default {
   data() {
     return {
@@ -12,9 +9,14 @@ export default {
     };
   },
   methods: {
-    submitApi(e) {
-
-      //per impedire il refresh della pagina
+    getAllData() {
+      axios.get(API_URL + "api-read.php")
+        .then(res => {
+          const data = res.data;
+          this.todoList = data;
+        });
+    },
+    addTask(e) {
       e.preventDefault();
       const params = {
         params: {
@@ -26,12 +28,10 @@ export default {
           this.getAllData();
         });
     },
-    getAllData() {
-      axios.get(API_URL + "api-read.php")
-        .then(res => {
-          const data = res.data;
-          console.log(data);
-          this.todoList = data;
+    removeTask(index) {
+      axios.delete(`${API_URL}api-delete.php?index=${index}`)
+        .then(() => {
+          this.getAllData();
         });
     }
   },
@@ -39,22 +39,22 @@ export default {
     this.getAllData();
   }
 }
-
 </script>
 
 <template>
 
   <div>
     <h1>ToDo LIST</h1>
-    <ul>
-      <li v-for="(todoElem, ind) in todoList" :key="ind">
-        {{ todoElem.text }}
-      </li>
-    </ul>
-    <form @submit="submitApi">
+    <form @submit="addTask">
       <input type="text" name="newTodo" v-model="newTodo">
       <input type="submit" value="CREATE">
     </form>
+    <ul>
+      <li v-for="(todoElem, ind) in todoList" :key="ind">
+        {{ todoElem.text }}
+        <button @click.prevent="removeTask(ind)">Rimuovi</button>
+      </li>
+    </ul>
   </div>
 
 
